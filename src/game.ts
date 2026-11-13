@@ -320,17 +320,12 @@ export class GameScene extends Phaser.Scene implements Arena {
     this.enemies.push(
       new ShmupPrefabSprite(
         this,
-        x,
-        y,
         "drone",
-        2,
-        100,
-        13,
-        0.015,
-        true,
-        false,
-        x,
-        x < WIDTH / 2 ? 1 : -1,
+        {
+          x,
+          y,
+          side: x < WIDTH / 2 ? 1 : -1,
+        },
       ),
     );
   }
@@ -394,8 +389,8 @@ export class GameScene extends Phaser.Scene implements Arena {
     if (
       t >= sector.length &&
       (
-        this.enemies,
-          length === 0 || t >= sector.length + SECTOR_CLEARANCE_TICKS
+        this.enemies.length === 0 ||
+        t >= sector.length + SECTOR_CLEARANCE_TICKS
       )
     ) {
       this.startSector(this.sector + 1);
@@ -414,7 +409,7 @@ export class GameScene extends Phaser.Scene implements Arena {
         sector.subtitle,
       );
     } else {
-      this.hud.announce("WARNING, The Warden approaches");
+      this.hud.announce("WARNING", "The Warden approaches");
       this.hud.shudder(true);
       play(this, "warn", 0.6);
       this.bossDueAt = this.now + BOSS_WARNING_TICKS;
@@ -429,14 +424,6 @@ export class GameScene extends Phaser.Scene implements Arena {
     centerX: number,
     formation: "line" | "vee" | "column" | "pincer",
   ): void {
-    const stats = {
-      drone: [2, 100, 13, 0.015, true],
-      dart: [1, 150, 12, 0.015, false],
-      turret: [12, 400, 19, 0.3, true],
-      lancer: [4, 250, 15, 0.06, true],
-    } as const;
-
-    const [hp, score, radius, dropChance, canShoot] = stats[kind];
     const middle = (count - 1) / 2;
 
     for (let i = 0; i < count; i++) {
@@ -469,20 +456,7 @@ export class GameScene extends Phaser.Scene implements Arena {
       if (t !== spawnAt) continue;
 
       this.enemies.push(
-        new ShmupPrefabSprite(
-          this,
-          x,
-          y,
-          kind,
-          hp,
-          score,
-          radius,
-          dropChance,
-          canShoot,
-          false,
-          x,
-          side,
-        ),
+        new ShmupPrefabSprite(this, kind, { x, y, side }),
       );
     }
   }
