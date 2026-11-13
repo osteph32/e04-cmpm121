@@ -162,8 +162,8 @@ interface PrefabSpec {
   score: number;
   radius: number;
   dropChance: number;
-  move?: (enemy: ShmupPrefabSprite, arena: Arena) => void;
-  fire?: (enemy: ShmupPrefabSprite, arena: Arena) => void;
+  move?: (enemy: Enemy, arena: Arena) => void;
+  fire?: (enemy: Enemy, arena: Arena) => void;
 }
 
 const PREFABS: Record<PrefabKind, PrefabSpec> = {
@@ -261,7 +261,7 @@ function aim(from: { x: number; y: number }, arena: Arena): number {
  * Base class for everything the player can shoot or pick up: enemies, the
  * boss and power-ups. kind is the prefab's name and also its texture key.
  */
-export class ShmupPrefabSprite extends Actor {
+export class Enemy extends Actor {
   maxHp: number;
   hp: number;
   score: number;
@@ -310,7 +310,7 @@ export class ShmupPrefabSprite extends Actor {
 }
 
 /** The Warden: a three-phase finale whose attacks escalate as it weakens. */
-export class ShmupBoss extends ShmupPrefabSprite {
+export class Boss extends Enemy {
   readonly core: Phaser.GameObjects.Image;
   private spin = 0;
 
@@ -392,7 +392,7 @@ export class ShmupBoss extends ShmupPrefabSprite {
   }
 }
 
-export class ShmupPowerUp extends Actor {
+export class PowerUp extends Actor {
   constructor(
     scene: Phaser.Scene,
     x: number,
