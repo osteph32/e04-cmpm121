@@ -5,14 +5,10 @@ import { play } from "../sounds.ts";
 import { TINTS } from "../textures.ts";
 import { Backdrop } from "./backdrop.ts";
 import { fadeOut } from "./boot.ts";
+import type { RunTotals } from "./play.ts";
 
 interface CutsceneData {
-  run: {
-    score: number;
-    kills: number;
-    hits: number;
-    continues: number;
-  };
+  run: RunTotals;
   attract: boolean;
 }
 
